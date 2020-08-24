@@ -17,7 +17,7 @@ const GOOGLE_URL_SELECTOR = "cite";
 // The function below has some values that are specific to the Google Search engine and thus
 // prone to breaking if breaking changes are made to that search engine. Update accordingly.
 
-let crawl = (): Set<string> => {
+let getURLs = (): Set<string> => {
     return u.thread(
             [...dom.fall(GOOGLE_URL_SELECTOR) as NodeListOf<Element>],  // gather all urls
             [(all: Element[]) => {
@@ -42,6 +42,7 @@ let crawl = (): Set<string> => {
             [(all: Element[]) => new Set(all)]
         ) as Set<string>;
 }
+
 
 let sendMessage = <T extends { command: string }>(message: T) => {
     chrome.runtime.sendMessage(message)
@@ -94,7 +95,7 @@ dom.f(".commit button", UserInputSection)?.addEventListener('click', ev => {
         category: capitalize(category.value),
         state: capitalize(state.value),
         city: isEmpty(city.value) ? '' : capitalize(city.value),
-        payload: crawl()
+        payload: getURLs()
     });
     window.alert("Batch sent to buffer");
 });

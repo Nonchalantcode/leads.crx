@@ -10,7 +10,8 @@
     "content_scripts": [
       {
         "matches": ["https://*.google.com/*", "https://*.google.com.ni/*"],
-        "js": ["content_script.js"]
+        "js": ["content_script.js"],
+        "css": ["content_script.css"]
       }
     ] 
 }
