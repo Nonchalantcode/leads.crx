@@ -1,4 +1,4 @@
-import { dom, u } from '../modules/utils'
+import { u } from '../modules/utils'
 import axios from 'axios'
 
 type CommandlineMessage = {

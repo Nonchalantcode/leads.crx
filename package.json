@@ -5,14 +5,17 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:background": "webpack --config webpack.background.js --mode=production"
+    "dev": "webpack --config webpack.config.js --mode=production"
   },
   "author": "Hector Gutierrez",
   "license": "ISC",
   "devDependencies": {
     "@types/chrome": "0.0.122",
     "css-loader": "^4.2.1",
+    "node-sass": "^4.14.1",
     "path": "^0.12.7",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.3",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.2",
     "typescript": "^4.0.2",

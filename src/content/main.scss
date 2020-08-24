@@ -1,0 +1,108 @@
+#ext-suggestions {
+	position: fixed;
+	right: 30px;
+	top: 100px;
+	border: 2px solid #E5DCE3;
+	min-width: 330px;
+	min-height: 300px;
+	max-height: 450px;
+	background-color: #2998b2;
+	z-index: 999;
+	overflow-y: auto;
+    border-radius: 3px;
+    h3 {
+        text-align: center;
+        background-color: navy;
+        color: #fff;
+        margin: 0px;
+        padding: 10px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+}
+
+.city-suggestions-panel {
+    .suggestion {
+        &.city-suggestion {
+            display: block;
+            padding: 3px;
+            padding-left: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #fff;
+            border-bottom: 1px solid #2ab0c6;
+        }
+    }
+}
+
+.ext-container {
+    &.controls {
+        position: fixed;
+        bottom: 100px;
+        width: 80%;
+        left: 10%;
+        background-color: whitesmoke;
+        display: flex;
+        align-items: flex-end;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        z-index: 999;
+        box-shadow: 2px 2px 2px #a29a9a;
+        .inputs {
+            flex-grow: 1;
+            input {
+                width: 25%;
+                border: 1px solid #555;
+                padding: 10px;
+                margin-right: 3px;
+                color: #000;
+                font-size: 16px;
+                &:focus {
+                    border: 1px solid #20bc47;
+                    border-left: 1px solid #46b4ea;
+                }
+            }
+        }
+        .commit {
+            align-self: center;
+            flex-grow: 1;
+            max-width: 250px;
+            button {
+                width: 100%;
+                display: block;
+                padding: 10px;
+                border: 1px solid #1fce22;
+                background-color: #00ff93;
+                cursor: pointer;
+                &:hover {
+                    background-color: aliceblue;
+                }
+            }
+        }
+    }
+}
+
+.state-suggestions,
+.city-suggestions {
+	position: absolute;
+	background-color: #008e58;
+	color: #fff;
+	width: 350px;
+	left: 23%;
+    bottom: 62px;
+    .suggestion {
+        display: block;
+        padding: 8px;
+        border-bottom: 1px solid #0cc442;
+        font-weight: 600;
+        font-size: 16px;
+        &.selected {
+            background-color: #ffd700;;
+        }
+    }
+}
+
+.city-suggestions {
+	left: 46%;
+}
