@@ -1,39 +1,54 @@
 $primary-font: monospace, sans-serif;
 
-#ext-suggestions {
-	position: fixed;
-	right: 30px;
-	top: 100px;
-	min-width: 330px;
-	min-height: 300px;
-	max-height: 450px;
-	background-color: #000;
-	z-index: 999;
-	overflow-y: auto;
+#main-panel {
+    position: fixed;
+    right: 30px;
+    top: 100px;
+    min-width: 330px;
+    background-color: #000;
+    z-index: 999;
     border-radius: 3px;
-    box-shadow: -10px 7px 0px #f31818;
-    h3 {
-        text-align: center;
-        color: #f35ef3;
-        margin: 0px;
-        padding: 10px;
-        margin-bottom: 10px;
-        text-transform: uppercase;
-        font-family: $primary-font;
-    }
-    .city-suggestions-panel {
-        .suggestion {
+    box-shadow: -10px 7px 0px #3c4043;
+    font-size: 14px;
+    #ext-suggestions {
+        min-height: 300px;
+        max-height: 450px;
+        overflow-y: auto;
+        h3 {
+            text-align: center;
+            color: #f35ef3;
+            margin: 0px;
+            padding: 10px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
             font-family: $primary-font;
-            &.city-suggestion {
-                display: block;
-                padding: 3px;
-                padding-left: 10px;
-                padding-bottom: 6px;
-                font-weight: bold;
-                font-size: 14px;
-                color: #fff;
-                text-transform: lowercase;
+        }
+        .city-suggestions-panel {
+            .suggestion {
+                font-family: $primary-font;
+                &.city-suggestion {
+                    display: block;
+                    padding: 3px;
+                    padding-left: 10px;
+                    padding-bottom: 6px;
+                    font-weight: bold;
+                    font-size: 1rem;
+                    color: #fff;
+                    text-transform: lowercase;
+                }
             }
+        }
+    }
+    .status-area {
+        margin-top: 1em;
+        border-top: 2px dashed greenyellow;
+        padding: 6px;
+        p {
+            font-family: $primary-font;
+            font-size: 1rem;
+            color: greenyellow;
+            margin: 0;
+            margin-bottom: 1em;
         }
     }
 }

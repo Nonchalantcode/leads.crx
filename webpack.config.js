@@ -3,7 +3,6 @@ const miniCSSExtract = require('mini-css-extract-plugin')
 
 
 module.exports = {
-    // watch: true,
     entry: {
         background_script: path.resolve(__dirname, 'src', 'background', 'background.ts'),
         content_script: path.resolve(__dirname, 'src', 'content', 'content.ts')
@@ -15,6 +14,7 @@ module.exports = {
     plugins: [new miniCSSExtract({
         filename: '[name].css'
     })],
+    devtool: 'inline-source-map',
     module: {
         rules: [
             {
@@ -36,7 +36,7 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.ts'],
-        modules: [path.resolve(__dirname, 'src', 'modules')],
+        extensions: ['.ts', '.js'],
+        modules: [path.resolve(__dirname, 'src', 'modules'), path.resolve(__dirname, 'node_modules')],
     }
 }

@@ -7,10 +7,12 @@ enum Keys { Up = "ArrowUp", Down = "ArrowDown", Enter = "Enter", Tab = "Tab" }
 
 let citiesSuggestionsElement = 
     dom.create(
-        `<div class="ext-container" id="ext-suggestions">
-            <h3>City suggestions</h3>
-            <div class="city-suggestions-panel">
+        `<div id="main-panel">
+            <div id="ext-suggestions">
+                <h3>City suggestions</h3>
+                <div class="city-suggestions-panel"></div>
             </div>
+            <div class="status-area"></div>
          </div>`) as HTMLElement
 
 let userInputElement =
@@ -26,6 +28,7 @@ let userInputElement =
             <div class="commit"><button>Commit</button></div>
         </div>`) as HTMLInputElement
 
+let statusArea = dom.f('.status-area', citiesSuggestionsElement)! as HTMLDivElement
 let stateInput = dom.f('input#state', userInputElement)!
 let cityInput = dom.f('input#city', userInputElement)!
 let statesSuggestionBox = dom.f('.state-suggestions', userInputElement)! as HTMLDivElement
@@ -168,4 +171,4 @@ export function insertControls(){
     [citiesSuggestionsElement, userInputElement].forEach(e => dom.append(e, document.body))
 }
 
-export { userInputElement as UserInputSection, allStates as StatesSuggestions }
+export { userInputElement as UserInputSection, allStates as StatesSuggestions, statusArea }

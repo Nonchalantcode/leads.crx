@@ -1,16 +1,11 @@
 import { dom, u } from "../modules/utils";
-import { insertControls, UserInputSection, StatesSuggestions } from './controls'
+import { insertControls, UserInputSection, StatesSuggestions, statusArea } from './controls'
 import './main.scss'
 
-insertControls();
+enum Commands { get_status, send_to_buffer }
+enum Status { general_status }
 
-type BufferCommand = {
-    command: 'buffer',
-    category: string,
-    state: string,
-    city: string,
-    payload: any
-}
+insertControls();
 
 const GOOGLE_URL_SELECTOR = "cite";
 
@@ -44,7 +39,7 @@ let getURLs = (): Set<string> => {
 }
 
 
-let sendMessage = <T extends { command: string }>(message: T) => {
+let sendMessage = <T extends { [v: string]: any }>(message: T) => {
     chrome.runtime.sendMessage(message)
 }
 
@@ -68,7 +63,6 @@ function capitalize(str: string): string{
             )
 }
 
-
 let [category, state, city] = dom.fall("#category, #state, #city") as NodeListOf<HTMLInputElement>;
 
 // Keyboard bindings 
@@ -90,12 +84,29 @@ dom.f(".commit button", UserInputSection)?.addEventListener('click', ev => {
         window.alert("Value of state is not in the list of available states in DB.");
         return;
     }
-    sendMessage<BufferCommand>({
+    sendMessage({
         command: 'buffer',
         category: capitalize(category.value),
         state: capitalize(state.value),
         city: isEmpty(city.value) ? '' : capitalize(city.value),
-        payload: getURLs()
+        data: getURLs()
     });
     window.alert("Batch sent to buffer");
 });
+
+sendMessage({
+    command: Commands.get_status
+})
+
+chrome.runtime.onMessage.addListener((message: { type: Status, [props: string]: any }, sender) => {
+    switch(message.type) {
+        case Status.general_status: {
+            statusArea.appendChild(
+                dom.create(`<p>Extension talking to port: <strong>[${message.port}]</strong></p>`) as HTMLElement
+            )
+            statusArea.appendChild(
+                dom.create(`<p>Server online? <strong>[${message.serverOnline ? 'Yes' : 'No'}]</strong></p>`) as HTMLElement
+            )
+        }
+    }
+})
