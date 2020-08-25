@@ -85,11 +85,11 @@ dom.f(".commit button", UserInputSection)?.addEventListener('click', ev => {
         return;
     }
     sendMessage({
-        command: 'buffer',
+        command: Commands.send_to_buffer,
         category: capitalize(category.value),
         state: capitalize(state.value),
         city: isEmpty(city.value) ? '' : capitalize(city.value),
-        data: getURLs()
+        data: [...getURLs()]
     });
     window.alert("Batch sent to buffer");
 });

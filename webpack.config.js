@@ -14,7 +14,6 @@ module.exports = {
     plugins: [new miniCSSExtract({
         filename: '[name].css'
     })],
-    devtool: 'inline-source-map',
     module: {
         rules: [
             {
