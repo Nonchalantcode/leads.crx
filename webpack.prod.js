@@ -4,8 +4,8 @@ const miniCSSExtract = require('mini-css-extract-plugin')
 
 module.exports = {
     entry: {
-        background_script: path.resolve(__dirname, 'src', 'background', 'background.ts'),
-        content_script: path.resolve(__dirname, 'src', 'content', 'content.ts')
+        background_script: path.resolve(__dirname, 'src', 'background-script', 'background.ts'),
+        content_script: path.resolve(__dirname, 'src', 'content-script', 'content.ts')
     },
     output: {
         path: path.resolve(__dirname, 'dist'),

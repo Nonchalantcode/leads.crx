@@ -3,7 +3,7 @@ class DOM{
         return context.querySelector(sel);
     };
 
-    static fall<T extends HTMLElement>(sel: string, context: (Document | T) = document): NodeListOf<T>{
+    static fall<T extends HTMLElement>(sel: string, context: (Document | Element) = document): NodeListOf<T>{
         return context.querySelectorAll(sel);
     }
     static create<T extends HTMLElement>(domString: string){
