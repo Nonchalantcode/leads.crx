@@ -11,7 +11,8 @@ let conf = {
                     '.io',
                     '.website',
                     '.online'],
-    leads_ext_container: '_leads_ext_container_'    
+    leads_ext_container: '_leads_ext_container_',
+    suggestionMatchOffset: 3    
 }
 
 export { conf }

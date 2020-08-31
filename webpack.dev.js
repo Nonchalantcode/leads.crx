@@ -18,7 +18,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'test'),
-        filename: '[name].[contenthash].js'
+        filename: '[name].js'
     },
     plugins: [
         new miniCSSExtract({
@@ -43,7 +43,7 @@ module.exports = {
                 }
             },
             {
-                test: /\.ts$/,
+                test: /\.tsx?$/,
                 exclude: /(node_modules|bower_components)/,
                 use: {
                     loader: 'ts-loader'   
