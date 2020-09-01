@@ -48,3 +48,5 @@ export const capitalize = (str: string): string => {
                 }]
             )
 }
+
+export const noop = () => {}

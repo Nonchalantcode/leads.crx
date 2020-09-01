@@ -12,7 +12,7 @@ let conf = {
                     '.website',
                     '.online'],
     leads_ext_container: '_leads_ext_container_',
-    suggestionMatchOffset: 3    
+    suggestionMatchOffset: 2    
 }
 
 export { conf }

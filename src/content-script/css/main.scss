@@ -1,5 +1,5 @@
-$primary-font: monospace, sans-serif;
-
+$primary-font: monospace,
+sans-serif;
 .text-white {
     color: #fff;
 }
@@ -33,7 +33,7 @@ $primary-font: monospace, sans-serif;
         .submit-container {
             position: relative;
             flex-grow: 1;
-            margin: 0 0.25em;
+            margin: 0 0.5em;
             .suggestions-box {
                 position: absolute;
                 bottom: 4em;
@@ -45,8 +45,12 @@ $primary-font: monospace, sans-serif;
                     color: #fff;
                     font-family: $primary-font;
                     margin-bottom: 0.5em;
-                    border-bottom: 1px solid #3728e6;
-                    padding-bottom: 0.5em;
+                    border-bottom: 1px solid #0abf40;
+                    padding: 0.5em;
+                    &.selected {
+                        background-color: greenyellow;
+                        color: #000;
+                    }
                     .suggestion-index {
                         display: inline-block;
                         margin-right: 0.5em;
@@ -55,14 +59,14 @@ $primary-font: monospace, sans-serif;
             }
         }
         input.crx-input {
-            color: #f4f4f4;
-            background-color: #db2559;
-            border: 1px solid #000;
+            color: #fff;
+            background-color: #000;
+            border: 1px solid #db2559;
             // width: 100%;
             &:focus,
             &:active {
-                border: 1px solid #fff;
-                box-shadow: 0px 0px 3px #fff;
+                border: 1px solid #f00;
+                box-shadow: 0px 0px 9px #f00;
             }
         }
         input.crx-input,
@@ -70,6 +74,14 @@ $primary-font: monospace, sans-serif;
             font-weight: 600;
             font-family: $primary-font;
             padding: 1em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            cursor: pointer;
+            &:hover {
+                color: red;
+            }
         }
     }
 }
