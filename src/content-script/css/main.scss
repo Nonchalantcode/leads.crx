@@ -1,5 +1,13 @@
 $primary-font: monospace,
 sans-serif;
+
+/****** COLORS ******/
+
+$pink-salmon: #EF959C;
+$orange: #B80C09;
+$black-chocolate: #20221C;
+$turquoise: #55D6C2;
+$cyber-grape: #4B3F72;
 .text-white {
     color: #fff;
 }
@@ -19,9 +27,10 @@ sans-serif;
     left: 5%;
     right: 5%;
     padding: 0.885em;
-    background-color: #1f2220;
-    box-shadow: -6px -6px 0px #000;
-    border: 2px solid #db2559;
+    background-color: $black-chocolate;
+    box-shadow: -6px -6px 0px $cyber-grape;
+    border: 2px solid $cyber-grape;
+    z-index: 1000;
     #search-bar {
         display: flex;
         flex-direction: row;
@@ -31,6 +40,7 @@ sans-serif;
         .state-container,
         .city-container,
         .submit-container {
+            border: 1px solid $turquoise;
             position: relative;
             flex-grow: 1;
             margin: 0 0.5em;
@@ -41,15 +51,16 @@ sans-serif;
                 padding: 1em;
                 width: 80%;
                 background-color: #000;
+                z-index: 1000;
                 .suggestion {
                     color: #fff;
                     font-family: $primary-font;
                     margin-bottom: 0.5em;
-                    border-bottom: 1px solid #0abf40;
+                    border-bottom: 1px solid $pink-salmon;
                     padding: 0.5em;
                     &.selected {
-                        background-color: greenyellow;
-                        color: #000;
+                        background-color: $black-chocolate;
+                        color: $pink-salmon;
                     }
                     .suggestion-index {
                         display: inline-block;
@@ -60,13 +71,13 @@ sans-serif;
         }
         input.crx-input {
             color: #fff;
-            background-color: #000;
-            border: 1px solid #db2559;
+            background-color: $cyber-grape;
+            border: 1px solid $cyber-grape;
             // width: 100%;
             &:focus,
             &:active {
-                border: 1px solid #f00;
-                box-shadow: 0px 0px 9px #f00;
+                border: 1px solid $turquoise;
+                box-shadow: 0px 0px 3px $turquoise;
             }
         }
         input.crx-input,
@@ -81,6 +92,50 @@ sans-serif;
             cursor: pointer;
             &:hover {
                 color: red;
+            }
+        }
+    }
+    .leads-sidebar {
+        position: fixed;
+        right: 2em;
+        bottom: 16em;
+        height: 600px;
+        width: 350px;
+        overflow-y: auto;
+        font-family: $primary-font;
+        padding: 1em;
+        background-color: $black-chocolate;
+        .cities-suggestion {
+            border-bottom: 3px solid #fff;
+            .heading {
+                border: 1px dashed #fff;
+                margin: 0;
+                padding: 0.25em;
+            }
+            .cities {
+                max-height: 400px;
+                overflow-y: auto;
+                padding: 0;
+                list-style-type: none;
+                color: #fff;
+                .city {
+                    display: inline-block;
+                    padding-bottom: 0.25em;
+                }
+                .city-number {
+                    display: inline-block;
+                    margin-right: 0.5em;
+                    min-width: 2em;
+                }
+            }
+        }
+        .extension-info {
+            margin-top: 1em;
+            .info {
+                color: #fff;
+                .v {
+                    color: $pink-salmon;
+                }
             }
         }
     }

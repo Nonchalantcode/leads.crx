@@ -1,4 +1,5 @@
 import React, { ReactEventHandler } from 'react';
+import { noop } from '../functions/functions'
 
 type InputProps = {
     placeholder: string;
@@ -7,20 +8,22 @@ type InputProps = {
     changeHandler: ReactEventHandler;
     className?: string;
     keydownHandler?: ReactEventHandler;
+    blurHandler?: ReactEventHandler;
 }
 
 const logKey = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     console.log(ev.key)
 }
 
-const StatelessInput = (props: InputProps) => {
+const UserInput = (props: InputProps) => {
     return <input type="text" 
                   name={props.name} 
                   placeholder={props.placeholder}
                   value={props.value}
-                  className={`crx-input ${props.className ? props.className : ''}`}  
+                  className={`crx-input ${props.className ? props.className : ''}`}
+                  onBlur={props.blurHandler || noop}  
                   onChange={props.changeHandler}
-                  onKeyDown={props.keydownHandler || logKey} />
+                  onKeyDown={props.keydownHandler || noop} />
 }
 
-export default StatelessInput 
+export default UserInput 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import StatelessInput from "./StatelessInput";
+import UserInput from "./UserInput";
 import { statesToCitiesMappings, allStates } from '../data/data'
 import SuggestionBox from './SuggestionsBox';
 import { capitalize, noop, isEmpty } from '../functions/functions'
 import { conf } from '../data/constants';
-const Search = () => {
 
+const Search = (props: { queryState: (v: string) => void }) => {
     const [category, setCategory] = useState('')
     const [state, setState] = useState('')
     const [city, setCity] = useState('')
@@ -43,7 +43,7 @@ const Search = () => {
                     clearSuggestions('city')
                 }
                 setCity(value)
-                break;
+                break
             }
         }
     }
@@ -52,11 +52,15 @@ const Search = () => {
         switch(suggestionsCollName) {
             case 'state': {
                 updateStateSuggestions([])
-                break;
+                break
             }
             case 'city': {
                 updateCitySuggestions([])
-                break;
+                break
+            }
+            case 'category': {
+                updateCategorySuggestions([])
+                break
             }
         }
         updateSuggestionIndex(-1)
@@ -68,13 +72,13 @@ const Search = () => {
                 updateStateSuggestions(
                     stateSuggestions.map((s, i) => index === i ? {...s, selected: true} : {...s, selected: false})
                 )
-                break;
+                break
             }
             case 'city': {
                 updateCitySuggestions(
                     citySuggestions.map((c, i) => index === i ? {...c, selected: true} : {...c, selected: false})
                 )
-                break;
+                break
             }
         }
 
@@ -100,12 +104,14 @@ const Search = () => {
             suggestionIndex !== -1) { /* if a suggestion is currently highlighted and user presses Enter or Tab, use it */
                 switch(inputName) {
                     case 'state': {
-                        setState(suggestionsColl[suggestionIndex].suggestion)
-                        break;
+                        let state = suggestionsColl[suggestionIndex].suggestion
+                        setState(state)
+                        props.queryState(state.trim())
+                        break
                     }
                     case 'city': {
                         setCity(suggestionsColl[suggestionIndex].suggestion)
-                        break;
+                        break
                     }
                 }
                 clearSuggestions(inputName)
@@ -119,15 +125,28 @@ const Search = () => {
         <div className="crx-leads">
             <div id="search-bar">
                 <div className="category-container">
-                    <StatelessInput placeholder="Business category" name="category" value={category} changeHandler={updateInput} />
+                    <UserInput placeholder="Business category" 
+                                name="category" 
+                                value={category} 
+                                changeHandler={updateInput} />
                 </div>
                 <div className="state-container">
                     <SuggestionBox searchTerm={state} data={stateSuggestions} />
-                    <StatelessInput placeholder="State" name="state" value={state} changeHandler={updateInput} keydownHandler={pick} />
+                    <UserInput placeholder="State" 
+                                name="state" 
+                                value={state} 
+                                changeHandler={updateInput} 
+                                keydownHandler={pick}
+                                blurHandler={ () => clearSuggestions('state') } />
                 </div>
                 <div className="city-container">
                     <SuggestionBox searchTerm={city} data={citySuggestions} />
-                    <StatelessInput placeholder="City" name="city" value={city} changeHandler={updateInput} keydownHandler={pick} />
+                    <UserInput placeholder="City" 
+                                name="city" 
+                                value={city} 
+                                changeHandler={updateInput} 
+                                keydownHandler={pick}
+                                blurHandler={ () => clearSuggestions('city') } />
                 </div>
                 <div className="submit-container">
                     <button className="submit">Commit</button>
