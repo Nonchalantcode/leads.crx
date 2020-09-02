@@ -4,14 +4,12 @@
     "description": "Chrome extension that integrates with the Clojure leads tool",
     "manifest_version": 2,
     "background": {
-      "scripts": ["background_script.js"],
-      "persistent": false
+        "scripts": ["background_script.js"],
+        "persistent": false
     },
-    "content_scripts": [
-      {
+    "content_scripts": [{
         "matches": ["https://*.google.com/*", "https://*.google.com.ni/*"],
         "js": ["content_script.js"],
         "css": ["content_script.css"]
-      }
-    ] 
+    }]
 }
