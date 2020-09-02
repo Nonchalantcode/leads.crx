@@ -1,17 +1,9 @@
 import { u } from '../modules/utils'
 import axios from 'axios'
+import { conf, Commands, Status } from '../data/constants'
 
-enum Commands { get_status, send_to_buffer }
-enum Status { general_status }
-
-let port = 8000
-let baseURL = `http://localhost:${port}`
-
-chrome.runtime.getPlatformInfo((v) => {
-    console.log(`Processor architecture: ${v.arch}`)
-    console.log(`Native client architecture: ${v.nacl_arch}`)
-    console.log(`OS: ${v.os}`)
-})
+let port = conf.port
+let baseURL = `${conf.baseURL}:${port}`
 
 const sendMessage = (message: { [v: string]: any }) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -21,7 +13,7 @@ const sendMessage = (message: { [v: string]: any }) => {
 
 chrome.runtime.onMessage.addListener((message: { command: Commands, [prop: string]: any }) => {
     switch(message.command) {
-        case Commands.get_status: {
+        case Commands.get_server_status: {
              axios
                 .get(baseURL)
                 .then(response => {

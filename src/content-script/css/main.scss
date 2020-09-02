@@ -12,6 +12,14 @@ $cyber-grape: #4B3F72;
     color: #fff;
 }
 
+.text-success {
+    color: $turquoise;
+}
+
+.text-failure {
+    color: $orange;
+}
+
 .text-bold {
     font-weight: 600;
 }
@@ -98,7 +106,7 @@ $cyber-grape: #4B3F72;
     .leads-sidebar {
         position: fixed;
         right: 2em;
-        bottom: 16em;
+        bottom: 8em;
         height: 600px;
         width: 350px;
         overflow-y: auto;
@@ -109,7 +117,7 @@ $cyber-grape: #4B3F72;
             border-bottom: 3px solid #fff;
             .heading {
                 border: 1px dashed #fff;
-                margin: 0;
+                margin: 0.5em;
                 padding: 0.25em;
             }
             .cities {
@@ -129,12 +137,21 @@ $cyber-grape: #4B3F72;
                 }
             }
         }
-        .extension-info {
+        .extension-info,
+        .server-info {
             margin-top: 1em;
+            border-bottom: 3px solid #fff;
             .info {
                 color: #fff;
+                font-family: $primary-font;
                 .v {
                     color: $pink-salmon;
+                    &.success {
+                        color: $turquoise;
+                    }
+                    &.failure {
+                        color: $pink-salmon;
+                    }
                 }
             }
         }

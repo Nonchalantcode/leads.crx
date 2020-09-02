@@ -12,7 +12,11 @@ let conf = {
                     '.website',
                     '.online'],
     leads_ext_container: '_leads_ext_container_',
-    suggestionMatchOffset: 2    
+    suggestionMatchOffset: 2,
+    baseURL: 'http://localhost'    
 }
 
-export { conf }
+enum Commands { get_server_status, send_to_buffer }
+enum Status { general_status }
+
+export { conf, Commands, Status }

@@ -1,4 +1,4 @@
-import { dom, u } from '../../modules/utils'
+import { dom, u } from './utils'
 import { conf } from '../data/constants'
 
 

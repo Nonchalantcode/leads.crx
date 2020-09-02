@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import ListItem from './ListItem'
-import { conf } from '../data/constants'
 
 type SuggestionsBoxProps = {
-    searchTerm: string;
     data: {suggestion: string, selected: boolean}[];
     className?: string;
 }
@@ -21,7 +19,8 @@ const NumberedSuggestion = (props: SuggestionProps) => {
 const SuggestionBox = (props: SuggestionsBoxProps) => {
     if(props.data.length === 0) return null
     return <ul className={`suggestions-box ${props.className ? props.className : ''}`}>
-                <p className="text-white text-bold primary-font">States suggestions:</p>
+                <p className="text-white text-bold primary-font">Suggestions:</p>
+                <p className="text-white text-bold primary-font">Use the Up/Down arrow keys to select a suggestion, then press Enter/Tab</p>
                 {
                     props
                     .data

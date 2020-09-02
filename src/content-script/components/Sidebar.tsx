@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import ListItem from './ListItem'
-import { statesToCitiesMappings as cities } from "../data/data"
-import { conf } from '../data/constants'
+import { statesToCitiesMappings as cities } from "../../data/data"
+import { conf } from '../../data/constants'
 
-const Sidebar = (props: { stateName: string }) => {
+const Sidebar = (props: { stateName: string, children: React.ReactNode }) => {
     const suggestions = cities[props.stateName]
     
     const displayCities = () => {
@@ -32,9 +32,12 @@ const Sidebar = (props: { stateName: string }) => {
                 { suggestions !== undefined ? displayCities() : <h3 className="heading text-white">[ No city suggestions ]</h3> }
             </div>
             <div className="extension-info">
-                <p className="info">Extension talking to port: <strong className="v">${conf.port}</strong></p>
-                <p className="info">Ignoring urls ending in: <strong className="v">{conf.ignored_tlds.join(', ')}</strong></p>
+                <p className="info">Extension talking to port: <strong className="v success">[{conf.port}]</strong></p>
+                <p className="info">Ignoring urls ending in: <strong className="v">[{conf.ignored_tlds.join(', ')}]</strong></p>
             </div>
+            {
+                props.children
+            }
         </div>
     )
 }

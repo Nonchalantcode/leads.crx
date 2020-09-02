@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import UserInput from "./UserInput";
-import { statesToCitiesMappings, allStates } from '../data/data'
+import { statesToCitiesMappings, allStates } from '../../data/data'
 import SuggestionBox from './SuggestionsBox';
-import { capitalize, noop, isEmpty } from '../functions/functions'
-import { conf } from '../data/constants';
+import { capitalize, noop, isEmpty } from '../../modules/functions'
+import { conf } from '../..//data/constants';
 
 const Search = (props: { queryState: (v: string) => void }) => {
     const [category, setCategory] = useState('')
@@ -14,7 +14,7 @@ const Search = (props: { queryState: (v: string) => void }) => {
     const [citySuggestions, updateCitySuggestions] = useState(new Array<{suggestion: string, selected: boolean}>())
     const [suggestionIndex, updateSuggestionIndex] = useState(-1) /* start without selecting a particular suggestion */
 
-    const updateInput = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const updateInputAndSuggestions = (ev: React.ChangeEvent<HTMLInputElement>) => {
         const value = ev.target.value
         switch(ev.target.name) {
             case 'category': {
@@ -81,7 +81,6 @@ const Search = (props: { queryState: (v: string) => void }) => {
                 break
             }
         }
-
     }
 
     const pick = (ev: React.KeyboardEvent) => {
@@ -128,23 +127,23 @@ const Search = (props: { queryState: (v: string) => void }) => {
                     <UserInput placeholder="Business category" 
                                 name="category" 
                                 value={category} 
-                                changeHandler={updateInput} />
+                                changeHandler={updateInputAndSuggestions} />
                 </div>
                 <div className="state-container">
-                    <SuggestionBox searchTerm={state} data={stateSuggestions} />
+                    <SuggestionBox data={stateSuggestions} />
                     <UserInput placeholder="State" 
                                 name="state" 
                                 value={state} 
-                                changeHandler={updateInput} 
+                                changeHandler={updateInputAndSuggestions} 
                                 keydownHandler={pick}
                                 blurHandler={ () => clearSuggestions('state') } />
                 </div>
                 <div className="city-container">
-                    <SuggestionBox searchTerm={city} data={citySuggestions} />
+                    <SuggestionBox data={citySuggestions} />
                     <UserInput placeholder="City" 
                                 name="city" 
                                 value={city} 
-                                changeHandler={updateInput} 
+                                changeHandler={updateInputAndSuggestions} 
                                 keydownHandler={pick}
                                 blurHandler={ () => clearSuggestions('city') } />
                 </div>

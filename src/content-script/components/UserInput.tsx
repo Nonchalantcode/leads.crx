@@ -1,5 +1,5 @@
 import React, { ReactEventHandler } from 'react';
-import { noop } from '../functions/functions'
+import { noop } from '../../modules/functions'
 
 type InputProps = {
     placeholder: string;

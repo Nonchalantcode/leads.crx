@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const miniCSSExtract = require('mini-css-extract-plugin')
 
 module.exports = {
+    watch: true,
     entry: {
         background_script: path.resolve(__dirname, 'src', 'background-script', 'background.ts'),
         content_script: path.resolve(__dirname, 'src', 'content-script', 'index.tsx')
@@ -16,7 +17,6 @@ module.exports = {
         new miniCSSExtract({
             filename: '[name].css'
         }),
-        new CleanWebpackPlugin(),
     ],
     module: {
         rules: [{
