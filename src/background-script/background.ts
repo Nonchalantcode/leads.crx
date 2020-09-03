@@ -1,11 +1,11 @@
 import { u } from '../modules/utils'
 import axios from 'axios'
-import { conf, Commands, Status } from '../data/constants'
+import { conf, Commands, Message as OutgoingMessage } from '../data/constants'
 
 let port = conf.port
 let baseURL = `${conf.baseURL}:${port}`
 
-const sendMessage = (message: { [v: string]: any }) => {
+const sendMessage = (message: OutgoingMessage) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         chrome.tabs.sendMessage(tabs[0].id!, message)
     })
@@ -17,10 +17,10 @@ chrome.runtime.onMessage.addListener((message: { command: Commands, [prop: strin
              axios
                 .get(baseURL)
                 .then(response => {
-                    sendMessage({ type: Status.general_status, port, serverOnline: true })
+                    sendMessage({ online: true })
                 })
                 .catch(error => {
-                    sendMessage({ type: Status.general_status, port, serverOnline: false })
+                    sendMessage({ online: false })
                 })
                 break; 
         }

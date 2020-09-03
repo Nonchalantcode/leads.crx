@@ -28,6 +28,14 @@ $cyber-grape: #4B3F72;
     font-family: $primary-font;
 }
 
+.flagged {
+    background-color: yellow;
+}
+
+.black-listed {
+    background-color: $pink-salmon;
+}
+
 #_leads_ext_container_ {
     position: fixed;
     bottom: 1em;
@@ -107,7 +115,7 @@ $cyber-grape: #4B3F72;
         position: fixed;
         right: 2em;
         bottom: 8em;
-        height: 600px;
+        height: 500px;
         width: 350px;
         overflow-y: auto;
         font-family: $primary-font;
@@ -138,7 +146,8 @@ $cyber-grape: #4B3F72;
             }
         }
         .extension-info,
-        .server-info {
+        .server-info,
+        .legend-info {
             margin-top: 1em;
             border-bottom: 3px solid #fff;
             .info {
@@ -153,6 +162,13 @@ $cyber-grape: #4B3F72;
                         color: $pink-salmon;
                     }
                 }
+            }
+        }
+        .legend-info {
+            padding-bottom: 1em;
+            .legend {
+                display: inline-block;
+                padding: 0.5em;
             }
         }
     }

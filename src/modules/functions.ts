@@ -1,7 +1,6 @@
 import { dom, u } from './utils'
 import { conf } from '../data/constants'
 
-
 const listURLs = () => {
     let resultsSet = new Set([...dom.fall(conf.google_url_selector)].map(result => result.textContent!))
     return [...resultsSet]
@@ -12,6 +11,16 @@ const listURLs = () => {
                 })
 }
 
+export const getFlaggedTLDsNodes = () => {
+        let results = [...dom.fall(conf.google_url_selector)]
+                        .filter(lead => {
+                            let [url] = lead.textContent!.split(/\s/)
+                            if( url.endsWith('/') ) url = url.slice(0, url.length - 1)
+                            return conf.ignored_tlds.some(tld => url.endsWith(tld))
+                        })
+        return results
+}
+
 const filterURLs = (urls: string[], ...filters: [(url: string) => boolean]) => {
     return filters
             .reduce((urls, filterCallback) => {
@@ -20,11 +29,10 @@ const filterURLs = (urls: string[], ...filters: [(url: string) => boolean]) => {
 }
 
 const isNotFlaggedTLD = (url: string) => {
-    return !conf.ignored_tlds.some(tld => tld.endsWith(url))
+    return !conf.ignored_tlds.some(tld => url.endsWith(tld))
 }
 
 export const getSearchResults = () => filterURLs(listURLs(), isNotFlaggedTLD)
-
 
 export const sendMessage = <T extends { [v: string]: any }>(message: T) => {
     chrome.runtime.sendMessage(message)
