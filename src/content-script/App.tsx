@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Search from './components/Search'
 import Sidebar from './components/Sidebar'
-import { conf, Commands, Message as IncomingMessage } from '../data/constants'
+import { statesToCitiesMappings } from '../data/data'
 import * as $__ from '../modules/functions'
+import { registerKeyBindings } from '../controllers/eventListeners'
+import  * as middleware  from '../controllers/middleware'
 import './css/main.scss'
 
 const App = () => {
@@ -10,62 +12,84 @@ const App = () => {
     const [state, setState] = useState('')
     const [isServerOnline, setServerStatus] = useState(false)
     const [leadCount, setLeadCount] = useState(0)
-    const [isListeningToBackgroundScript, setListenerStatus] = useState(false)
+    const [keyboardBindinsSet, updateBindingStatus] = useState(false)
+    const [leadsList, updateLeadsList] = useState(new Array<string>())
 
     const queryState = (stateName: string) => {
         setState(stateName)
     }
 
-    const queryServerStatus = () => {
-        $__.sendMessage({ command: Commands.get_server_status})
+    const getUserInputs = (category: string, state: string, city: string) => {
+        if($__.isEmpty(category)) {
+            alert(`Category value can't be empty`)
+            return
+        }
+        if($__.isEmpty(state)) {
+            alert(`State value can't be empty`)
+            return
+        }
+        if($__.isEmpty(city)) {
+            alert(`City value can't be empty`)
+            return
+        }
+        if(statesToCitiesMappings[state] === undefined) {
+            alert(`${state} is not in the list of suggested states. Is it mispelled perhaps?`)
+            return
+        }
+        if(!statesToCitiesMappings[state].includes(city)) {
+            alert(`${city} is not in the list of cities for ${state}`)
+            return
+        }
+
+        (async () => {
+            try {
+                let {data: { total, categories }} = await middleware.getLeadsStats()
+                let response = await middleware.bufferLeads($__.capitalize(category), $__.capitalize(state), $__.capitalize(city), leadsList)
+                setLeadCount(total)
+                console.log(response.data)
+            } catch (err) {
+                console.log(`Something has gone wrong`)
+            }
+        })()
+
     }
     
     useEffect(() => {
-        if(!isListeningToBackgroundScript) {
-            chrome.runtime.onMessage.addListener((message: IncomingMessage, sender) => {
-                if('online' in message) {
-                    setServerStatus(message.online)
-                    return
-                }
-                if('total' in message) {
-                    setLeadCount(message.total)
-                }
-            })
-
-            window.addEventListener('keydown', (ev) => {
-                if(ev.altKey && ev.key === 'n') {
-                    try {
-                        (document.querySelector(conf.next_page_selector) as HTMLAnchorElement)
-                            .click()
-                    } catch(err) {
-                        console.warn(`Couldn't go to next page. Has selector for next page changed or already in last page?`)
-                    }
-                }
-                if(ev.altKey && ev.key === 'p') {
-                    try {
-                        (document.querySelector(conf.previous_page_selector) as HTMLAnchorElement)
-                            .click()
-                    } catch(err) {
-                        console.warn(`Couldn't go to previous page. Has selector for previous page changed or already on first page?`)
-                    }
-                }
-            })
-            $__.getFlaggedTLDsNodes()
-                .forEach(flaggedNode => {
-                    flaggedNode.classList.add('flagged')
-                })
+        if(!keyboardBindinsSet) {
+            registerKeyBindings()
         }
-        queryServerStatus()
+        middleware.queryServerStatus()
+                    .then(response => {
+                        setServerStatus(true)
+                    })
+                    .then(() => {
+                        middleware
+                            .getLeadsStats()
+                            .then(({data}) => {
+                                setLeadCount(data.total)
+                            })
+                    })
+                    .catch(err => {
+                        console.log(`Server isn't online`)
+                    })
+
+        $__.getFlaggedTLDsNodes()
+            .forEach(flaggedNode => flaggedNode.classList.add('flagged'))
+        updateLeadsList($__.getSearchResults())
     }, [])
 
     return (
         <>
-            <Search queryState={queryState} />
+            <Search queryState={queryState} submitHandler={getUserInputs} />
             <div className="leads-sidebar">
                 <Sidebar stateName={state}>
                     <div className="server-info">
-                        <p className="info">Server listening? <strong className={`v ${isServerOnline ? 'success' : 'failure'}`}>[{ isServerOnline ? 'Yes' : 'No' }]</strong></p>
-                        <p className="info">Lead count: <strong className={`v ${isServerOnline ? 'success' : 'failure'}`}>[{ isServerOnline ? leadCount : 'n/a' }]</strong></p>
+                        <p className="info">
+                            Server listening? <strong className={`v ${isServerOnline ? 'success' : 'failure'}`}>[{ isServerOnline ? 'Yes' : 'No' }]</strong>
+                        </p>
+                        <p className="info">
+                            Lead count: <strong className={`v ${isServerOnline ? 'success' : 'failure'}`}>[{ isServerOnline ? leadCount : 'n/a' }]</strong>
+                        </p>
                     </div>
                     <div className="legend-info">
                         <p className="info">Legend</p>

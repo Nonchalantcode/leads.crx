@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import ListItem from './ListItem'
 import { statesToCitiesMappings as cities } from "../../data/data"
 import { conf } from '../../data/constants'

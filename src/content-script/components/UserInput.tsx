@@ -11,10 +11,6 @@ type InputProps = {
     blurHandler?: ReactEventHandler;
 }
 
-const logKey = (ev: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(ev.key)
-}
-
 const UserInput = (props: InputProps) => {
     return <input type="text" 
                   name={props.name} 

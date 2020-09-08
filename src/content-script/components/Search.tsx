@@ -2,10 +2,15 @@ import React, { useState } from 'react'
 import UserInput from "./UserInput";
 import { statesToCitiesMappings, allStates } from '../../data/data'
 import SuggestionBox from './SuggestionsBox';
-import { capitalize, noop, isEmpty } from '../../modules/functions'
+import { isEmpty } from '../../modules/functions'
 import { conf } from '../..//data/constants';
 
-const Search = (props: { queryState: (v: string) => void }) => {
+type SearchProps = {
+    queryState: (v: string) => void;
+    submitHandler: (category: string, state: string, city: string) => void
+}
+
+const Search = (props: SearchProps) => {
     const [category, setCategory] = useState('')
     const [state, setState] = useState('')
     const [city, setCity] = useState('')
@@ -148,7 +153,7 @@ const Search = (props: { queryState: (v: string) => void }) => {
                                 blurHandler={ () => clearSuggestions('city') } />
                 </div>
                 <div className="submit-container">
-                    <button className="submit">Commit</button>
+                    <button className="submit" onClick={ () => props.submitHandler(category.trim(), state.trim(), city.trim()) }>Commit</button>
                 </div>
             </div>
             <div className="sidebar"></div>

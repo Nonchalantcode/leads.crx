@@ -23,7 +23,7 @@ let conf = {
 enum Commands { 
                 get_server_status, 
                 get_lead_count,
-                send_to_buffer 
+                buffer 
               }
 
 type ServerStatus = {
