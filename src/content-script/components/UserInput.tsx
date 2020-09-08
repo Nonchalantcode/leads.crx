@@ -1,4 +1,4 @@
-import React, { ReactEventHandler } from 'react';
+import React, { ReactEventHandler } from 'react'
 import { noop } from '../../modules/functions'
 
 type InputProps = {

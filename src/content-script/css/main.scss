@@ -171,5 +171,12 @@ $cyber-grape: #4B3F72;
                 padding: 0.5em;
             }
         }
+        .buffer-info {
+            bottom: 1em;
+            background-color: $turquoise;
+            .info {
+                color: $black-chocolate;
+            }
+        }
     }
 }

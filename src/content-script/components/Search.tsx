@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
-import UserInput from "./UserInput";
+import React, { useState, useEffect } from 'react'
+import UserInput from "./UserInput"
 import { statesToCitiesMappings, allStates } from '../../data/data'
-import SuggestionBox from './SuggestionsBox';
+import SuggestionBox from './SuggestionsBox'
 import { isEmpty } from '../../modules/functions'
-import { conf } from '../..//data/constants';
+import { conf } from '../..//data/constants'
+import { getLeadsStats } from "../../controllers/middleware";
 
 type SearchProps = {
     queryState: (v: string) => void;
@@ -18,6 +19,21 @@ const Search = (props: SearchProps) => {
     const [stateSuggestions, updateStateSuggestions] = useState(new Array<{suggestion: string, selected: boolean}>())
     const [citySuggestions, updateCitySuggestions] = useState(new Array<{suggestion: string, selected: boolean}>())
     const [suggestionIndex, updateSuggestionIndex] = useState(-1) /* start without selecting a particular suggestion */
+
+    useEffect(() => {
+        /* See if there's any active categories, and if so, update the 'category' input so that the last one used is set by default */
+        (async () => {
+            try {
+                let { data: { categories }} = await getLeadsStats()
+                if(isEmpty(categories)) {
+                    return 
+                }
+                setCategory(categories[0])
+            } catch (err) {
+                console.log(`Something has gone wrong`)
+            }
+        })()
+    }, [])
 
     const updateInputAndSuggestions = (ev: React.ChangeEvent<HTMLInputElement>) => {
         const value = ev.target.value

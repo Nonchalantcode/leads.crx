@@ -14,6 +14,7 @@ const App = () => {
     const [leadCount, setLeadCount] = useState(0)
     const [keyboardBindinsSet, updateBindingStatus] = useState(false)
     const [leadsList, updateLeadsList] = useState(new Array<string>())
+    const [afterBufferMessage, setAfterBufferMessage] = useState('')
 
     const queryState = (stateName: string) => {
         setState(stateName)
@@ -43,10 +44,11 @@ const App = () => {
 
         (async () => {
             try {
-                let {data: { total, categories }} = await middleware.getLeadsStats()
-                let response = await middleware.bufferLeads($__.capitalize(category), $__.capitalize(state), $__.capitalize(city), leadsList)
+                let { data: message } = await middleware.bufferLeads($__.capitalize(category), $__.capitalize(state), $__.capitalize(city), leadsList)
+                let {data: { total }} = await middleware.getLeadsStats()
                 setLeadCount(total)
-                console.log(response.data)
+                setAfterBufferMessage(message)
+                setTimeout(() => setAfterBufferMessage(''), 1500)
             } catch (err) {
                 console.log(`Something has gone wrong`)
             }
@@ -57,21 +59,18 @@ const App = () => {
     useEffect(() => {
         if(!keyboardBindinsSet) {
             registerKeyBindings()
+            updateBindingStatus(true)
         }
-        middleware.queryServerStatus()
-                    .then(response => {
-                        setServerStatus(true)
-                    })
-                    .then(() => {
-                        middleware
-                            .getLeadsStats()
-                            .then(({data}) => {
-                                setLeadCount(data.total)
-                            })
-                    })
-                    .catch(err => {
-                        console.log(`Server isn't online`)
-                    })
+        (async () => {
+            try {
+                let _ = await middleware.queryServerStatus()
+                let { data: { total } } = await middleware.getLeadsStats()
+                setServerStatus(true)
+                setLeadCount(total)
+            } catch (err) {
+                console.log(`Server doesn't seem to be online or extension is listening to wrong port.`)
+            }
+        })()
 
         $__.getFlaggedTLDsNodes()
             .forEach(flaggedNode => flaggedNode.classList.add('flagged'))
