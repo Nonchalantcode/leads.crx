@@ -44,8 +44,6 @@ $cyber-grape: #4B3F72;
     right: 5%;
     padding: 0.885em;
     background-color: $black-chocolate;
-    box-shadow: -6px -6px 0px $cyber-grape;
-    border: 2px solid $cyber-grape;
     z-index: 1000;
     #search-bar {
         display: flex;
@@ -56,7 +54,7 @@ $cyber-grape: #4B3F72;
         .state-container,
         .city-container,
         .submit-container {
-            border: 1px solid $turquoise;
+            border: none;
             position: relative;
             flex-grow: 1;
             margin: 0 0.5em;
@@ -87,9 +85,16 @@ $cyber-grape: #4B3F72;
         }
         input.crx-input {
             color: #fff;
-            background-color: $cyber-grape;
-            border: 1px solid $cyber-grape;
-            // width: 100%;
+            background-color: #000;
+            border-radius: 6px;
+            border: none;
+            &::placeholder {
+                color: #ccc;
+            }
+            &::selection {
+                color: #000;
+                background-color: yellow;
+            }
             &:focus,
             &:active {
                 border: 1px solid $turquoise;
@@ -171,12 +176,80 @@ $cyber-grape: #4B3F72;
                 padding: 0.5em;
             }
         }
+        .save {
+            position: absolute;
+            bottom: 0px;
+            width: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            .save-btn {
+                display: block;
+                width: 100%;
+                font-family: monospace;
+                padding: 10px;
+                background-color: #00ff43;
+                color: #000;
+                border: 1px solid #fff;
+                border-radius: 3px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: 0.25s all;
+                &:hover {
+                    background-color: #000;
+                    color: #00ff43;
+                }
+            }
+            .save-panel {
+                display: flex;
+                flex-direction: row;
+                input {
+                    width: 80%;
+                    padding: 10px;
+                    &:focus,
+                    &:active {
+                        border: none;
+                    }
+                }
+                button {
+                    width: 10%;
+                    cursor: pointer;
+                }
+            }
+        }
         .buffer-info {
             bottom: 1em;
             background-color: $turquoise;
             .info {
                 color: $black-chocolate;
             }
+        }
+    }
+}
+
+#temporal-results {
+    position: fixed;
+    top: 100px;
+    z-index: 1000;
+    background-color: #fff;
+    padding: 10px;
+    border: 2px solid #000;
+    width: 70%;
+    left: 15%;
+    .close {
+        span {
+            float: right;
+            cursor: pointer;
+            border: 1px solid orangered;
+            padding: 3px;
+        }
+    }
+    .results {
+        margin-top: 20px;
+        span {
+            display: block;
+            padding-bottom: 6px;
         }
     }
 }

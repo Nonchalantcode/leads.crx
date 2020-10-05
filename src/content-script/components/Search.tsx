@@ -4,7 +4,6 @@ import { statesToCitiesMappings, allStates } from '../../data/data'
 import SuggestionBox from './SuggestionsBox'
 import { isEmpty } from '../../modules/functions'
 import { conf } from '../..//data/constants'
-import { getLeadsStats } from "../../controllers/middleware";
 
 type SearchProps = {
     queryState: (v: string) => void;
@@ -24,13 +23,13 @@ const Search = (props: SearchProps) => {
         /* See if there's any active categories, and if so, update the 'category' input so that the last one used is set by default */
         (async () => {
             try {
-                let { data: { categories }} = await getLeadsStats()
+                /* let { data: { categories }} = await getLeadsStats()
                 if(isEmpty(categories)) {
                     return 
                 }
-                setCategory(categories[0])
+                setCategory(categories[0]) */
             } catch (err) {
-                console.log(`Something has gone wrong`)
+                console.log(`No suggestions for category`)
             }
         })()
     }, [])

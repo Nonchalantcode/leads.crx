@@ -6,15 +6,17 @@ import * as $__ from '../modules/functions'
 import { registerKeyBindings } from '../controllers/eventListeners'
 import  * as middleware  from '../controllers/middleware'
 import './css/main.scss'
+import Axios, { AxiosResponse } from 'axios'
+import { vetolist } from '../data/data'
 
 const App = () => {
 
+    const domainMatcher = /(https?:\/\/)?(www\.)?(.+)\.\w+($|\/)/
     const [state, setState] = useState('')
     const [isServerOnline, setServerStatus] = useState(false)
     const [leadCount, setLeadCount] = useState(0)
     const [keyboardBindinsSet, updateBindingStatus] = useState(false)
     const [leadsList, updateLeadsList] = useState(new Array<string>())
-    const [afterBufferMessage, setAfterBufferMessage] = useState('')
 
     const queryState = (stateName: string) => {
         setState(stateName)
@@ -42,20 +44,42 @@ const App = () => {
             return
         }
 
-        (async () => {
+        interface LeadSchema {
+            url: string,
+            category: string,
+            state: string,
+            city: string
+        }
+
+        const urls = leadsList.filter(lead => {
             try {
-                let { data: message } = await middleware.bufferLeads($__.capitalize(category), $__.capitalize(state), $__.capitalize(city), leadsList)
-                let {data: { total }} = await middleware.getLeadsStats()
-                setLeadCount(total)
-                setAfterBufferMessage(message)
-                setTimeout(() => setAfterBufferMessage(''), 1500)
-            } catch (err) {
-                console.log(`Something has gone wrong`)
+                const [, , , domain ] = lead.match(domainMatcher)!
+                return !vetolist.has(domain)
+            } catch (error) {
+                return true
             }
-        })()
+        })
+
+        Axios.post<LeadSchema, AxiosResponse<{total: number}>>(
+            'http://localhost:8000/api/upload',
+            urls.map(url => ({ url, category: $__.capitalize(category), state: $__.capitalize(state), city: $__.capitalize(city) }))
+        ).then(response => {
+            setLeadCount(response.data.total)
+        }).catch(response => {
+            alert(`Something went wrong`)
+        })
 
     }
     
+    const saveLeadsToDisk = (status: {saved: boolean, message: string, total: number}) => {
+        if(status.saved) {
+            setLeadCount(0)
+            alert('Leads saved!')
+            return
+        }
+        alert(status.message)
+    }
+
     useEffect(() => {
         if(!keyboardBindinsSet) {
             registerKeyBindings()
@@ -63,10 +87,9 @@ const App = () => {
         }
         (async () => {
             try {
-                let _ = await middleware.queryServerStatus()
-                let { data: { total } } = await middleware.getLeadsStats()
+                let response = await middleware.queryServerStatus()
                 setServerStatus(true)
-                setLeadCount(total)
+                setLeadCount(response.data.total)
             } catch (err) {
                 console.log(`Server doesn't seem to be online or extension is listening to wrong port.`)
             }
@@ -81,7 +104,7 @@ const App = () => {
         <>
             <Search queryState={queryState} submitHandler={getUserInputs} />
             <div className="leads-sidebar">
-                <Sidebar stateName={state}>
+                <Sidebar stateName={state} saveLeadsCallback={saveLeadsToDisk}>
                     <div className="server-info">
                         <p className="info">
                             Server listening? <strong className={`v ${isServerOnline ? 'success' : 'failure'}`}>[{ isServerOnline ? 'Yes' : 'No' }]</strong>
