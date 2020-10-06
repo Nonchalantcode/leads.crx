@@ -168,7 +168,11 @@ const Search = (props: SearchProps) => {
                                 blurHandler={ () => clearSuggestions('city') } />
                 </div>
                 <div className="submit-container">
-                    <button className="submit" onClick={ () => props.submitHandler(category.trim(), state.trim(), city.trim()) }>Commit</button>
+                    <button className="submit" 
+                            onClick={ () => {
+                                props.submitHandler(category.trim(), state.trim(), city.trim())
+                                alert('Sent')
+                            } }>Commit</button>
                 </div>
             </div>
             <div className="sidebar"></div>

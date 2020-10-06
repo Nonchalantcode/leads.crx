@@ -31,18 +31,19 @@ const Sidebar = (props: { stateName: string, children: React.ReactNode, saveLead
 
 
     const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-        let filename = ev.target.value.trim()
-        setFilename(filename)
+        setFilename(ev.target.value)
     }
 
     const saveLeads = () => {
-        if(filename.length === 0) {
+        let fname = filename.trim()
+        if(fname.length === 0) {
             alert('Enter a filename')
             return
         }
-        Axios.post<{filename: string}, {data: {saved: boolean, message: string, total: number}}>(`${conf.baseURL}:${conf.port}/api/save`, { filename: filename })
+        Axios.post<{filename: string}, {data: {saved: boolean, message: string, total: number}}>(`${conf.baseURL}:${conf.port}/api/save`, { filename: fname })
             .then(response => {
                 props.saveLeadsCallback(response.data)
+                if(response.data.saved) setSaveStatus(false)
             })
             .catch(err => {
                 alert('There was an error while trying to save leads to disk.')

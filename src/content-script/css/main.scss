@@ -177,12 +177,10 @@ $cyber-grape: #4B3F72;
             }
         }
         .save {
-            position: absolute;
             bottom: 0px;
             width: 100%;
-            left: 0;
-            right: 0;
             z-index: 1000;
+            margin-top: 10px;
             .save-btn {
                 display: block;
                 width: 100%;
@@ -197,7 +195,7 @@ $cyber-grape: #4B3F72;
                 cursor: pointer;
                 transition: 0.25s all;
                 &:hover {
-                    background-color: #000;
+                    background-color: transparent;
                     color: #00ff43;
                 }
             }
@@ -207,9 +205,10 @@ $cyber-grape: #4B3F72;
                 input {
                     width: 80%;
                     padding: 10px;
+                    border: none;
                     &:focus,
                     &:active {
-                        border: none;
+                        outline: none;
                     }
                 }
                 button {
