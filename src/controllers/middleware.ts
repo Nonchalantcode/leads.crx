@@ -10,5 +10,5 @@ export const queryServerStatus = () => {
 
 export const bufferLeads = (category: string, state: string, city: string, leads: string[]) => {
     return axios
-            .post<string>(`${base}/api/buffer?category=${category}&state=${state}&city=${city}`, leads)
+            .post<string>(`${base}/api/upload?category=${category}&state=${state}&city=${city}`, leads)
 }

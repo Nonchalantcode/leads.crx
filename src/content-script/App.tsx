@@ -60,14 +60,15 @@ const App = () => {
             }
         })
 
-        Axios.post<LeadSchema, AxiosResponse<{total: number}>>(
-            'http://localhost:8000/api/upload',
-            urls.map(url => ({ url, category: $__.capitalize(category), state: $__.capitalize(state), city: $__.capitalize(city) }))
-        ).then(response => {
-            setLeadCount(response.data.total)
-        }).catch(response => {
-            alert(`Something went wrong`)
-        })
+        console.log(category, state, city)
+        console.log(urls)
+        middleware.bufferLeads($__.capitalize(category), $__.capitalize(state), $__.capitalize(city), urls)
+            .then(response => {
+                // setLeadCount(response.data.total)
+                console.log(response)
+            }).catch(response => {
+                alert(`Something went wrong`)
+            })
 
     }
     
@@ -81,6 +82,7 @@ const App = () => {
     }
 
     useEffect(() => {
+        
         if(!keyboardBindinsSet) {
             registerKeyBindings()
             updateBindingStatus(true)
@@ -89,7 +91,7 @@ const App = () => {
             try {
                 let response = await middleware.queryServerStatus()
                 setServerStatus(true)
-                setLeadCount(response.data.total)
+                // setLeadCount(response.data.total)
             } catch (err) {
                 console.log(`Server doesn't seem to be online or extension is listening to wrong port.`)
             }
@@ -98,6 +100,7 @@ const App = () => {
         $__.getFlaggedTLDsNodes()
             .forEach(flaggedNode => flaggedNode.classList.add('flagged'))
         updateLeadsList($__.getSearchResults())
+
     }, [])
 
     return (

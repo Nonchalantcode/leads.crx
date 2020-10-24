@@ -146,7 +146,8 @@ const Search = (props: SearchProps) => {
                 <div className="category-container">
                     <UserInput placeholder="Business category" 
                                 name="category" 
-                                value={category} 
+                                value={category}
+                                
                                 changeHandler={updateInputAndSuggestions} />
                 </div>
                 <div className="state-container">
