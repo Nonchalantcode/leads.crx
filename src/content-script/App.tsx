@@ -6,7 +6,6 @@ import * as $__ from '../modules/functions'
 import { registerKeyBindings } from '../controllers/eventListeners'
 import  * as middleware  from '../controllers/middleware'
 import './css/main.scss'
-import Axios, { AxiosResponse } from 'axios'
 import { vetolist } from '../data/data'
 
 const App = () => {
@@ -22,26 +21,26 @@ const App = () => {
         setState(stateName)
     }
 
-    const getUserInputs = (category: string, state: string, city: string) => {
+    const getUserInputs = async (category: string, state: string, city: string) => {
         if($__.isEmpty(category)) {
             alert(`Category value can't be empty`)
-            return
+            return false
         }
         if($__.isEmpty(state)) {
             alert(`State value can't be empty`)
-            return
+            return false
         }
         if($__.isEmpty(city)) {
             alert(`City value can't be empty`)
-            return
+            return false 
         }
         if(statesToCitiesMappings[state] === undefined) {
             alert(`${state} is not in the list of suggested states. Is it mispelled perhaps?`)
-            return
+            return false
         }
         if(!statesToCitiesMappings[state].includes(city)) {
             alert(`${city} is not in the list of cities for ${state}`)
-            return
+            return false
         }
 
         interface LeadSchema {
@@ -60,15 +59,14 @@ const App = () => {
             }
         })
 
-        console.log(category, state, city)
-        console.log(urls)
-        middleware.bufferLeads($__.capitalize(category), $__.capitalize(state), $__.capitalize(city), urls)
-            .then(response => {
-                // setLeadCount(response.data.total)
-                console.log(response)
-            }).catch(response => {
-                alert(`Something went wrong`)
-            })
+        try {
+            let {data: {leadcount}} = await middleware.bufferLeads($__.capitalize(category), $__.capitalize(state), $__.capitalize(city), urls)
+            return true;
+        } catch {
+            alert(`Couldn't send leads to server`)
+            return false
+        }
+
 
     }
     
@@ -82,16 +80,16 @@ const App = () => {
     }
 
     useEffect(() => {
-        
+
         if(!keyboardBindinsSet) {
             registerKeyBindings()
             updateBindingStatus(true)
         }
         (async () => {
             try {
-                let response = await middleware.queryServerStatus()
+                let {data} = await middleware.queryServerStatus()
                 setServerStatus(true)
-                // setLeadCount(response.data.total)
+                setLeadCount(data.leadcount)
             } catch (err) {
                 console.log(`Server doesn't seem to be online or extension is listening to wrong port.`)
             }

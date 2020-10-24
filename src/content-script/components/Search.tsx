@@ -4,10 +4,11 @@ import { statesToCitiesMappings, allStates } from '../../data/data'
 import SuggestionBox from './SuggestionsBox'
 import { isEmpty } from '../../modules/functions'
 import { conf } from '../..//data/constants'
+import { getActiveCategories } from "../../controllers/middleware";
 
 type SearchProps = {
     queryState: (v: string) => void;
-    submitHandler: (category: string, state: string, city: string) => void
+    submitHandler: (category: string, state: string, city: string) => Promise<boolean>
 }
 
 const Search = (props: SearchProps) => {
@@ -23,11 +24,8 @@ const Search = (props: SearchProps) => {
         /* See if there's any active categories, and if so, update the 'category' input so that the last one used is set by default */
         (async () => {
             try {
-                /* let { data: { categories }} = await getLeadsStats()
-                if(isEmpty(categories)) {
-                    return 
-                }
-                setCategory(categories[0]) */
+                let {data: {categories}} = await getActiveCategories()
+                setCategory(categories[categories.length - 1])
             } catch (err) {
                 console.log(`No suggestions for category`)
             }
@@ -172,11 +170,13 @@ const Search = (props: SearchProps) => {
                     <button className="submit" 
                             onClick={ () => {
                                 props.submitHandler(category.trim(), state.trim(), city.trim())
-                                alert('Sent')
+                                .then(success => {
+                                    if(success) alert('Sent!')
+                                })
+                                
                             } }>Commit</button>
                 </div>
             </div>
-            <div className="sidebar"></div>
         </div>
     )
 }

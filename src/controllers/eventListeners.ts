@@ -3,7 +3,7 @@ import { conf } from '../data/constants'
 export const registerKeyBindings = () => {
     let latency = 500
     let ctrlBindingActive = false
-    let shiftBindingActive = false
+    let altBindingActive = false
     const googleSearchInput = document.querySelector<HTMLInputElement>(`${conf.google_search_input_selector}`)
 
     /* category input created by the react application. This isn't the nicest way to select this component, but it's quick and doesn't require a use of ref */
@@ -40,14 +40,14 @@ export const registerKeyBindings = () => {
             }, latency)
             return
         }
-        if(ev.shiftKey) {
-            if(shiftBindingActive) {
+        if(ev.altKey) {
+            if(altBindingActive) {
                 categoryInput!.focus()
-                shiftBindingActive = false
+                altBindingActive = false
             }
-            shiftBindingActive = true
+            altBindingActive = true
             setTimeout(() => {
-                shiftBindingActive = false
+                altBindingActive = false
             }, latency)
         }
     })
