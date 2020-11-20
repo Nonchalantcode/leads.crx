@@ -1,13 +1,9 @@
 import React, { useState } from 'react'
 import ListItem from './ListItem'
 import { statesToCitiesMappings as cities } from "../../data/data"
-import Axios from 'axios'
-import { conf } from '../../data/constants'
 
-const Sidebar = (props: { stateName: string, children: React.ReactNode, saveLeadsCallback: (status: {saved: boolean, message: string, total: number}) => void }) => {
+const Sidebar = (props: { stateName: string, children: React.ReactNode}) => {
     const suggestions = cities[props.stateName]
-    const [isSaving, setSaveStatus] = useState(false)
-    const [filename, setFilename] = useState('')
 
     const displayCities = () => {
         return (
@@ -29,27 +25,6 @@ const Sidebar = (props: { stateName: string, children: React.ReactNode, saveLead
         )
     }
 
-
-    const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-        setFilename(ev.target.value)
-    }
-
-    const saveLeads = () => {
-        let fname = filename.trim()
-        if(fname.length === 0) {
-            alert('Enter a filename')
-            return
-        }
-        Axios.post<{filename: string}, {data: {saved: boolean, message: string, total: number}}>(`${conf.baseURL}:${conf.port}/api/save`, { filename: fname })
-            .then(response => {
-                props.saveLeadsCallback(response.data)
-                if(response.data.saved) setSaveStatus(false)
-            })
-            .catch(err => {
-                alert('There was an error while trying to save leads to disk.')
-            })
-    }
-
     return (
         <div id="crx-sidebar">
             <div className="cities-suggestion">
@@ -58,23 +33,6 @@ const Sidebar = (props: { stateName: string, children: React.ReactNode, saveLead
             {
                 props.children
             }
-            <div className="save">
-                {
-                    isSaving ? 
-                        <div className="save-panel">
-                            <input type="text" 
-                                    placeholder="File name"
-                                    value={filename}
-                                    onChange={handleChange} />
-                            <button className="ok-btn" onClick={saveLeads}>OK</button>
-                            <button className="cancel-btn" onClick={() => setSaveStatus(false)}>X</button>
-                        </div> :
-                        <button className="save-btn" onClick={() => {
-                            setSaveStatus(true)
-                            setFilename('') 
-                        }}>Save</button>
-                }
-            </div>
         </div>
     )
 }

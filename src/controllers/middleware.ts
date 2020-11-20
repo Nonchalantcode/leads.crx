@@ -15,5 +15,15 @@ export const getActiveCategories = () => {
 
 export const bufferLeads = (category: string, state: string, city: string, leads: string[]) => {
     return axios
-            .post<{message: string, leadcount: number}>(`${base}/api/upload?category=${category}&state=${state}&city=${city}`, leads)
+            .post<{message: string, leadcount: number}>(`${base}/leads/upload?category=${category}&state=${state}&city=${city}`, leads)
+}
+
+export const saveBuffer = () => {
+    return axios
+        .post<{message: string, error: boolean}>(`${base}/leads/save`)
+}
+
+export const discardBuffer = () => {
+    return axios
+        .post<{message: string, error: boolean}>(`${base}/leads/discard`)
 }

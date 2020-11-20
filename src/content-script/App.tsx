@@ -16,6 +16,7 @@ const App = () => {
     const [leadCount, setLeadCount] = useState(0)
     const [keyboardBindinsSet, updateBindingStatus] = useState(false)
     const [leadsList, updateLeadsList] = useState(new Array<string>())
+    const [isDiscarding, setDiscard] = useState(false)
 
     const queryState = (stateName: string) => {
         setState(stateName)
@@ -43,13 +44,6 @@ const App = () => {
             return false
         }
 
-        interface LeadSchema {
-            url: string,
-            category: string,
-            state: string,
-            city: string
-        }
-
         const urls = leadsList.filter(lead => {
             try {
                 const [, , , domain ] = lead.match(domainMatcher)!
@@ -61,22 +55,13 @@ const App = () => {
 
         try {
             let {data: {leadcount}} = await middleware.bufferLeads($__.capitalize(category), $__.capitalize(state), $__.capitalize(city), urls)
-            return true;
+            setLeadCount(leadcount)
+            return true
         } catch {
             alert(`Couldn't send leads to server`)
             return false
         }
 
-
-    }
-    
-    const saveLeadsToDisk = (status: {saved: boolean, message: string, total: number}) => {
-        if(status.saved) {
-            setLeadCount(0)
-            alert('Leads saved!')
-            return
-        }
-        alert(status.message)
     }
 
     useEffect(() => {
@@ -101,11 +86,31 @@ const App = () => {
 
     }, [])
 
+    const saveLeads = async () => {
+        let {data: {message, error}} = await middleware.saveBuffer()
+        if(error) {
+            alert(`An error has ocurred while trying to save leads: ${message}`)
+        } else {
+            setLeadCount(0)
+            alert("Leads were saved!")
+        }
+    }
+
+    const discardLeads = async () => {
+        let {data: {message, error}} = await middleware.discardBuffer()
+        if(error) {
+            alert(message)
+        } else {
+            setLeadCount(0)
+            alert(message)
+        }
+    }
+
     return (
         <>
             <Search queryState={queryState} submitHandler={getUserInputs} />
             <div className="leads-sidebar">
-                <Sidebar stateName={state} saveLeadsCallback={saveLeadsToDisk}>
+                <Sidebar stateName={state}>
                     <div className="server-info">
                         <p className="info">
                             Server listening? <strong className={`v ${isServerOnline ? 'success' : 'failure'}`}>[{ isServerOnline ? 'Yes' : 'No' }]</strong>
@@ -119,6 +124,24 @@ const App = () => {
                         <span className="legend flagged">Flagged tld</span>
                         <span className="legend black-listed">Blacklisted URL</span>
                     </div>
+                    {
+                        leadCount !== 0 ? 
+                            <div style={{marginTop: '10px'}}>
+                                <div className={`save ${isDiscarding ? 'hidden' : ''}`}>
+                                    <button className="submit" onClick={async () => await saveLeads()}>
+                                        Save leads
+                                    </button>
+                                </div>
+                                <div className="discard" style={{marginTop: '10px'}}>
+                                    <button className={`discard ${isDiscarding ? 'hidden': ''}`} onClick={() => setDiscard(true)}>
+                                        Discard leads
+                                    </button>
+                                    <button className={`confirm ${isDiscarding ? '' : 'hidden'}`} onClick={async () =>  await discardLeads()}>Yes</button>
+                                    <button className={`cancel ${isDiscarding ? '' : 'hidden'}`} onClick={() => setDiscard(false)}>No</button>
+                                </div>
+                            </div> :
+                            null
+                    }
                 </Sidebar>
             </div>
         </>
